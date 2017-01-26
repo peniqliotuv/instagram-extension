@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+    "name": "Right Click",
+    "description": "",
+    "version": "1.0",
+    "permissions": [
+      "tabs"
+    ],
+    "browser_action": {
+      "default_icon" : "photo-camera.png",
+      "default_title": "",
+      "default_popup": ""
+    },
+    "background": {
+
+    },
+    "web_accessible_resources": ["contextmenu.css", "ProximaNovaRegular.otf"],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://www.instagram.com/*"
+            ],
+            "js": [
+                "jquery-3.1.1.min.js", "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ]
+}
