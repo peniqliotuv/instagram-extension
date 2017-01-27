@@ -2,6 +2,7 @@ var imgs = [];
 
 window.setInterval(function(){
   $('img').each(function(){
+    var img = $(this);
     if (!imgs.contains(this.src)){
       var sibling = $(this).closest('div').siblings('div');
 
@@ -11,6 +12,7 @@ window.setInterval(function(){
       var headers = $('header').find('*');
       var nav = $('nav').find('*');
       var comments = sibling.parents('article').children('div').eq(1).find('*');
+      var images = $('img');
       //Pressure changing
       Pressure.set(sibling, {
         change: function (force, event){
@@ -20,6 +22,9 @@ window.setInterval(function(){
             var result = 'rgb('+color+','+color+','+color+')';
             console.log(result);
             $(this).css('background-color', result);
+          });
+          images.not(img).each(function(){
+            blur($(this), force);
           });
           nav.each(function(){
             blur($(this), force);
@@ -35,6 +40,9 @@ window.setInterval(function(){
           $('header').each(function(){
             $(this).css('background-color', '#FFFFFF');
           });
+          images.each(function(){
+            restore($(this));
+          });
           nav.each(function(){
             restore($(this));
           });
@@ -45,7 +53,7 @@ window.setInterval(function(){
             restore($(this));
           });
         }
-      }, {polyFillSpeed: 10});
+      }, {polyFillSpeed: 9999999999});
 
       sibling.attr("href", this.src);
       sibling.unbind('click');
@@ -101,7 +109,7 @@ Array.prototype.contains = function (val) {
 
 // Helper functions to blur and unblur the image
 function blur(element, pressure){
-  var blurVal = 'blur(' + 8*pressure + 'px)';
+  var blurVal = 'blur(' + 15*pressure + 'px)';
   element.css({
     'filter'        : blurVal,
    '-webkit-filter' : blurVal,
