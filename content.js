@@ -1,6 +1,5 @@
 var imgs = [];
 
-
 window.setInterval(function(){
   $('img').each(function(){
     if (!imgs.contains(this.src)){
@@ -12,31 +11,41 @@ window.setInterval(function(){
       var headers = $('header').find('*');
       var nav = $('nav').find('*');
       var comments = sibling.parents('article').children('div').eq(1).find('*');
+      //Pressure changing
       Pressure.set(sibling, {
         change: function (force, event){
-          //console.log(force);
+          $('header').each(function(){
+            diff = (force/20);
+            var color = 255-diff;
+            var result = 'rgb('+color+','+color+','+color+')';
+            console.log(result);
+            $(this).css('background-color', result);
+          });
           nav.each(function(){
-            $(this).css('opacity', 1-force)
+            blur($(this), force);
           })
           headers.each(function(){
-            $(this).css('opacity', 1-force);
+            blur($(this), force);
           });
           comments.each(function(){
-            $(this).css('opacity', 1-force);
+            blur($(this), force);
           });
         },
         end: function(){
+          $('header').each(function(){
+            $(this).css('background-color', '#FFFFFF');
+          });
           nav.each(function(){
-            $(this).css('opacity', 1);
-          })
+            restore($(this));
+          });
           headers.each(function(){
-            $(this).css('opacity', 1);
+            restore($(this));
           });
           comments.each(function(){
-            $(this).css('opacity', 1);
-          })
+            restore($(this));
+          });
         }
-      }, {polyFillSpeed: 800000});
+      }, {polyFillSpeed: 10});
 
       sibling.attr("href", this.src);
       sibling.unbind('click');
@@ -73,7 +82,6 @@ window.setInterval(function(){
           menu.data("source", source);
           document.getElementById("context-menu-2").setAttribute("data-clipboard-text", source);
           document.getElementById("a-context-menu-3").setAttribute("href", source.split('?')[0]);
-    //      console.log("added data-value: " + document.getElementById("context-menu-2").getAttribute("data-clipboard-text"));
           menu.show();
 
         }
@@ -91,13 +99,37 @@ Array.prototype.contains = function (val) {
    return false;
 };
 
+// Helper functions to blur and unblur the image
+function blur(element, pressure){
+  var blurVal = 'blur(' + 8*pressure + 'px)';
+  element.css({
+    'filter'        : blurVal,
+   '-webkit-filter' : blurVal,
+   '-moz-filter'    : blurVal,
+   '-o-filter'      : blurVal,
+   '-ms-filter'     : blurVal,
+   'opacity'        : 1-(pressure)
+  });
+}
+
+function restore(element){
+  element.css({
+    'filter'        : 'blur(0px)',
+   '-webkit-filter' : 'blur(0px)',
+   '-moz-filter'    : 'blur(0px)',
+   '-o-filter'      : 'blur(0px)',
+   '-ms-filter'     : 'blur(0px)',
+   'opacity'        : 1
+  });
+}
+
 $(document).ready(function () {
     console.log('document ready');
     $("<div class='menu'><ul><a href='javascript:void(0);'><li id='context-menu-1'>Open in new tab</li></a><a href='javascript:void(0);'><li id='context-menu-2'  data-clipboard-text='d'>Copy link to clipboard</li></a><a id='a-context-menu-3' download href='';'><li id='context-menu-3'>Save as</li></a></ul></div>").appendTo("body");
 
     var css = chrome.extension.getURL('contextmenu.css');
     $('head').append('<link rel="stylesheet" href="' + css + '" type="text/css" />');
-    var clipboard = chrome.extension.getURL('clipboard.min.js');
+    var clipboard = chrome.extension.getURL('lib/clipboard.min.js');
     $('head').append('<script src="' + clipboard + '"></script>');
 		$("html").on("contextmenu", function(e){
 		  e.preventDefault();
@@ -107,7 +139,6 @@ $(document).ready(function () {
     clipboard.on('success', function(e) {
       console.log("text: " + e.text);
     });
-
 
     $("html").on("click", function(){
 			$(".menu").hide();

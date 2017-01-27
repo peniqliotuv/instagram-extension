@@ -15,14 +15,14 @@
     "background": {
 
     },
-    "web_accessible_resources": ["contextmenu.css", "jquery.pressure.min.js", "pressure.min.js", "clipboard.min.js",      "ProximaNovaRegular.otf"],
+    "web_accessible_resources": ["contextmenu.css", "lib/jquery.pressure.min.js", "lib/pressure.min.js", "lib/clipboard.min.js", "ProximaNovaRegular.otf"],
     "content_scripts": [
         {
             "matches": [
                 "*://www.instagram.com/*"
             ],
             "js": [
-                "jquery-3.1.1.min.js", "jquery.pressure.min.js", "pressure.min.js", "clipboard.min.js", "content.js"
+                "lib/jquery-3.1.1.min.js", "lib/jquery.pressure.min.js", "lib/pressure.min.js", "lib/clipboard.min.js", "content.js"
             ],
             "run_at": "document_end"
         }
