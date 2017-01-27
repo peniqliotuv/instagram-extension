@@ -14,14 +14,14 @@
     "background": {
 
     },
-    "web_accessible_resources": ["contextmenu.css", "ProximaNovaRegular.otf"],
+    "web_accessible_resources": ["contextmenu.css", "clipboard.min.js", "ProximaNovaRegular.otf"],
     "content_scripts": [
         {
             "matches": [
                 "*://www.instagram.com/*"
             ],
             "js": [
-                "jquery-3.1.1.min.js", "content.js"
+                "jquery-3.1.1.min.js", "clipboard.min.js", "content.js"
             ],
             "run_at": "document_end"
         }

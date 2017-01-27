@@ -4,14 +4,15 @@ window.setInterval(function(){
   $('img').each(function(){
     if (!imgs.contains(this.src)){
       var sibling = $(this).closest('div').siblings('div');
-      sibling.attr("href", this.src);
+      var source = this.src;
+      //sibling.attr("href", this.src);
       sibling.unbind('click');
       sibling.mousedown(function(event) {
         if (event.ctrlKey || event.metaKey){
           window.open(sibling.attr("href"));
         }
         if (event.which == 3) {
-          console.log("asdf");
+
           event.preventDefault();
 
           var menu = $(".menu");
@@ -20,7 +21,7 @@ window.setInterval(function(){
           //get x and y values of the click event
           var pageX = event.pageX;
           var pageY = event.pageY;
-          //position menu div near mouse cliked area
+          //position menu div near mouse clicked area
           menu.css({top: pageY , left: pageX});
           var mwidth = menu.width();
           var mheight = menu.height();
@@ -36,8 +37,11 @@ window.setInterval(function(){
           if(pageY+mheight > screenHeight+scrTop){
            menu.css({top:pageY-mheight});
           }
-          //finally show the menu
+          menu.data("source", source);
+          document.getElementById("context-menu-2").setAttribute("data-clipboard-text", source);
+    //      console.log("added data-value: " + document.getElementById("context-menu-2").getAttribute("data-clipboard-text"));
           menu.show();
+
         }
       });
       imgs.push(this.src);
@@ -45,7 +49,7 @@ window.setInterval(function(){
   });
 }, 1000);
 
-
+//Helper function
 Array.prototype.contains = function (val) {
   for (i in this) {
        if (this[i] == val) return true;
@@ -53,15 +57,30 @@ Array.prototype.contains = function (val) {
    return false;
 };
 
-
 $(document).ready(function () {
-    $("<div class='menu'><ul><a href='#'><li>Open in new tab</li></a><a href='#'><li>Copy link to clipboard</li></a><a href='#'><li>Save as</li></a></ul></div>").appendTo("body");
+    console.log('document ready');
+    $("<div class='menu'><ul><a href='javascript:void();'><li id='context-menu-1'>Open in new tab</li></a><a href='javascript:void();'><li id='context-menu-2'  data-clipboard-text='d'>Copy link to clipboard</li></a><a href='javascript:void();'><li id='context-menu-3'>Save as</li></a></ul></div>").appendTo("body");
+
     var css = chrome.extension.getURL('contextmenu.css');
     $('head').append('<link rel="stylesheet" href="' + css + '" type="text/css" />');
+    var clipboard = chrome.extension.getURL('clipboard.min.js');
+    $('head').append('<script src="' + clipboard + '"></script>');
 		$("html").on("contextmenu", function(e){
 		  e.preventDefault();
 		});
+
+    var clipboard = new Clipboard('#context-menu-2');
+    clipboard.on('success', function(e) {
+      console.log("text: " + e.text);
+    });
+
+
     $("html").on("click", function(){
 			$(".menu").hide();
 		});
+
+    $('#context-menu-1').click(function(){
+      window.open($(".menu").data('source'));
+    });
+
 });
