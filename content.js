@@ -1,11 +1,44 @@
 var imgs = [];
 
+
 window.setInterval(function(){
   $('img').each(function(){
     if (!imgs.contains(this.src)){
       var sibling = $(this).closest('div').siblings('div');
+
       var source = this.src;
-      //sibling.attr("href", this.src);
+      sibling.css('z-index', 500);
+
+      var headers = $('header').find('*');
+      var nav = $('nav').find('*');
+      var comments = sibling.parents('article').children('div').eq(1).find('*');
+      Pressure.set(sibling, {
+        change: function (force, event){
+          //console.log(force);
+          nav.each(function(){
+            $(this).css('opacity', 1-force)
+          })
+          headers.each(function(){
+            $(this).css('opacity', 1-force);
+          });
+          comments.each(function(){
+            $(this).css('opacity', 1-force);
+          });
+        },
+        end: function(){
+          nav.each(function(){
+            $(this).css('opacity', 1);
+          })
+          headers.each(function(){
+            $(this).css('opacity', 1);
+          });
+          comments.each(function(){
+            $(this).css('opacity', 1);
+          })
+        }
+      }, {polyFillSpeed: 800000});
+
+      sibling.attr("href", this.src);
       sibling.unbind('click');
       sibling.mousedown(function(event) {
         if (event.ctrlKey || event.metaKey){

@@ -1,7 +1,8 @@
 {
   "manifest_version": 2,
-    "name": "Right Click",
-    "description": "",
+    "name": "Instagram Web Enhancement Kit",
+    "description": "Get your right-clicking permissions back with this slim and efficient extension! Open your
+      favorite images in a new tab, save to your desktop, and copy the link to your clipboard!",
     "version": "1.0",
     "permissions": [
       "tabs"
@@ -14,14 +15,14 @@
     "background": {
 
     },
-    "web_accessible_resources": ["contextmenu.css", "clipboard.min.js", "ProximaNovaRegular.otf"],
+    "web_accessible_resources": ["contextmenu.css", "jquery.pressure.min.js", "pressure.min.js", "clipboard.min.js",      "ProximaNovaRegular.otf"],
     "content_scripts": [
         {
             "matches": [
                 "*://www.instagram.com/*"
             ],
             "js": [
-                "jquery-3.1.1.min.js", "clipboard.min.js", "content.js"
+                "jquery-3.1.1.min.js", "jquery.pressure.min.js", "pressure.min.js", "clipboard.min.js", "content.js"
             ],
             "run_at": "document_end"
         }
