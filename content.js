@@ -39,6 +39,7 @@ window.setInterval(function(){
           }
           menu.data("source", source);
           document.getElementById("context-menu-2").setAttribute("data-clipboard-text", source);
+          document.getElementById("a-context-menu-3").setAttribute("href", source.split('?')[0]);
     //      console.log("added data-value: " + document.getElementById("context-menu-2").getAttribute("data-clipboard-text"));
           menu.show();
 
@@ -59,7 +60,7 @@ Array.prototype.contains = function (val) {
 
 $(document).ready(function () {
     console.log('document ready');
-    $("<div class='menu'><ul><a href='javascript:void();'><li id='context-menu-1'>Open in new tab</li></a><a href='javascript:void();'><li id='context-menu-2'  data-clipboard-text='d'>Copy link to clipboard</li></a><a href='javascript:void();'><li id='context-menu-3'>Save as</li></a></ul></div>").appendTo("body");
+    $("<div class='menu'><ul><a href='javascript:void(0);'><li id='context-menu-1'>Open in new tab</li></a><a href='javascript:void(0);'><li id='context-menu-2'  data-clipboard-text='d'>Copy link to clipboard</li></a><a id='a-context-menu-3' download href='';'><li id='context-menu-3'>Save as</li></a></ul></div>").appendTo("body");
 
     var css = chrome.extension.getURL('contextmenu.css');
     $('head').append('<link rel="stylesheet" href="' + css + '" type="text/css" />');
